@@ -7,4 +7,3 @@ Thanks to https://www.isyatirim.com.tr/tr-tr/Sayfalar/default.aspx, I could acce
 
 I am just at the beginning of my journey.
 
-#python 
