@@ -6,3 +6,5 @@ Since Financial Services are not developed well in Turkey, to access the data fo
 Thanks to https://www.isyatirim.com.tr/tr-tr/Sayfalar/default.aspx, I could access data with "beautifulsoup" of python library.
 
 I am just at the beginning of my journey.
+
+#python 
