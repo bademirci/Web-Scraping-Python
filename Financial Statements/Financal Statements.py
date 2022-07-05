@@ -2,21 +2,16 @@
 """
 Created on Wed Aug 18 22:02:04 2021
 
-@author: batuh
+@author: batuhan
 """
 import bs4 as bs
 import urllib.request
 import json
 import pandas as pd
-desired_width=320
-pd.set_option('display.width', desired_width)
-pd.set_option('display.max_columns',10)
-
-#Bilanco verilerini elde etmek için oluşturduğum kod.
+                                #Bilanco verilerini elde etmek için oluşturduğum kod.
  
-hisse = "MGROS"
-
-sauce15 = urllib.request.urlopen("https://www.isyatirim.com.tr/_layouts/15/IsYatirim.Website/Common/Data.aspx/MaliTablo?companyCode={}&exchange=TRY&financialGroup=XI_29&year1=2021&period1=6&year2=2020&period2=12&year3=2020&period3=9&year4=2020&period4=6&_=1620763995205".format(hisse)).read()
+hisse = "KONTR"
+sauce15 = urllib.request.urlopen("https://www.isyatirim.com.tr/_layouts/15/IsYatirim.Website/Common/Data.aspx/MaliTablo?companyCode={}&exchange=TRY&financialGroup=XI_29&year1=2021&period1=6&year2=2021&period2=9&year3=2021&period3=12&year4=2022&period4=3&_=1620763995205".format(hisse)).read()
 data15 = json.loads(sauce15)
 
 sauce = urllib.request.urlopen("https://www.isyatirim.com.tr/_layouts/15/IsYatirim.Website/Common/Data.aspx/MaliTablo?companyCode={}&exchange=TRY&financialGroup=XI_29&year1=2021&period1=3&year2=2020&period2=12&year3=2020&period3=9&year4=2020&period4=6&_=1620763995205".format(hisse)).read()
@@ -62,37 +57,36 @@ sauce14 = urllib.request.urlopen("https://www.isyatirim.com.tr/_layouts/15/IsYat
 data14 = json.loads(sauce14)
 
 
-
-
-
-
-#data_obj = data["value"][x]["itemDescEng"],data["value"][0]["value1"],data["value"][0]["value2"],data["value"][0]["value3"],data["value"][0]["value4"]
-
-cols =["Kalem","2021-6","2021-3","2020-12","2020-9","2020-6",
+cols =["Kalem",
+        "2022-3","2021-12","2021-9","2021-6",
+        "2021-3","2020-12","2020-9","2020-6",
         "2020-3","2019-12","2019-9","2019-6",
-       "2019-3","2018-12","2018-9","2018-6",
-       "2018-3","2017-12","2017-9","2017-6",
-       "2017-3","2016-12","2016-9","2016-6",
-       "2016-3","2015-12","2015-9","2015-6",
-       "2015-3","2014-12","2014-9","2014-6",
-       "2014-3","2013-12","2013-9","2013-6",
-       "2013-3","2012-12","2012-9","2012-6",
-       "2012-3","2011-12","2011-9","2011-6",
-       "2011-3","2010-12","2010-9"
+        "2019-3","2018-12","2018-9","2018-6",
+        "2018-3","2017-12","2017-9","2017-6",
+        "2017-3","2016-12","2016-9","2016-6",
+        "2016-3","2015-12","2015-9","2015-6",
+        "2015-3","2014-12","2014-9","2014-6",
+        "2014-3","2013-12","2013-9","2013-6",
+        "2013-3","2012-12","2012-9","2012-6",
+        "2012-3","2011-12","2011-9","2011-6",
+        "2011-3","2010-12","2010-9"
 
        ]
 df = pd.DataFrame(columns=cols)
-for x in range(len(data13["value"])):
 
-    df = df.append({"Kalem": data["value"][x]["itemDescTr"],
+for x in range(len(data15["value"])):
+
+    df2 = pd.DataFrame({"Kalem": data["value"][x]["itemDescTr"],
+                    "2021-12": data15["value"][x]["value3"],
+                    "2021-9": data15["value"][x]["value2"],
                     "2021-6": data15["value"][x]["value1"],
                     "2021-3":data["value"][x]["value1"],
-                   "2020-12":data["value"][x]["value2"],
-                   "2020-9": data["value"][x]["value3"],
-                   "2020-6": data["value"][x]["value4"],
+                    "2020-12":data["value"][x]["value2"],
+                    "2020-9": data["value"][x]["value3"],
+                    "2020-6": data["value"][x]["value4"],
                     "2020-3":data2["value"][x]["value2"],
-                   "2019-12":data2["value"][x]["value3"],
-                   "2019-9": data2["value"][x]["value4"],
+                    "2019-12":data2["value"][x]["value3"],
+                    "2019-9": data2["value"][x]["value4"],
                     "2019-6": data3["value"][x]["value2"],
                     "2019-3": data3["value"][x]["value3"],
                     "2018-12": data3["value"][x]["value4"],
@@ -131,9 +125,10 @@ for x in range(len(data13["value"])):
                     "2010-9": data14["value"][x]["value4"]
 
 
-                    },ignore_index=True)
+                    },index=[0])
 
-
+    df = pd.concat([df, df2], ignore_index = True)
 df[df.columns[1:]] = (df[df.columns[1:]].astype(float)/1000000)
 #df[df.columns[1:]] = (df[df.columns[1:]].style.format('${0:,.2f}'))
 df.to_excel(hisse+".xlsx",sheet_name=hisse)
+
